@@ -30,6 +30,18 @@ function RightGallery() {
   const [items, setItems] = useState([]);
   const [show, setShow] = useState(false);
   const [modalData, setModalData] = useState({ userId: null, imageId: null });
+  const [mobile, setMobile] = useState(false);
+
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 1200);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 1200);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [window.innerWidth]);
 
   const handleClose = useCallback(() => setShow(false), []);
   const handleShow = useCallback((userId, imageId) => {
@@ -94,35 +106,66 @@ function RightGallery() {
       </div>
 
       <div className="gallery-parent-container">
-        <div className="menu-filter-container">
-          <Button
-            className="mukta-semibold menu-shuffle"
-            onClick={shuffleItems}
-          >
-            Shuffle Items
-          </Button>
-          <div className="menu-filter">
-            <button onClick={() => setFilter("*")}>All Items</button>
-            <button onClick={() => setFilter("House")}>House</button>
-            <button onClick={() => setFilter("Animals")}>Animals</button>
-            <button onClick={() => setFilter("Vehicles")}>Vehicles</button>
-            <button onClick={() => setFilter("Others")}>Others</button>
-          </div>
-          <div>
+        {!isMobile ? (
+          <div className="menu-filter-container">
             <Button
-              className="mukta-semibold menu-sort"
-              onClick={() => sortItems("asc")}
+              className="mukta-semibold menu-shuffle"
+              onClick={shuffleItems}
             >
-              Ascending
+              Shuffle Items
             </Button>
-            <Button
-              className="mukta-semibold menu-sort"
-              onClick={() => sortItems("desc")}
+            <div className="menu-filter">
+              <button onClick={() => setFilter("*")}>All Items</button>
+              <button onClick={() => setFilter("House")}>House</button>
+              <button onClick={() => setFilter("Animals")}>Animals</button>
+              <button onClick={() => setFilter("Vehicles")}>Vehicles</button>
+              <button onClick={() => setFilter("Others")}>Others</button>
+            </div>
+            <div>
+              <Button
+                className="mukta-semibold menu-sort"
+                onClick={() => sortItems("asc")}
+              >
+                Ascending
+              </Button>
+              <Button
+                className="mukta-semibold menu-sort"
+                onClick={() => sortItems("desc")}
+              >
+                Descending
+              </Button>
+            </div>
+          </div>
+        ) : (
+          <div className="menu-filter-container">
+            <select
+              name="filter"
+              id="mobile-filter"
+              onChange={(e) => setFilter(e.target.value)}
             >
-              Descending
+              <option value="*">All Items</option>
+              <option value="House">House</option>
+              <option value="Animals">Animals</option>
+              <option value="Vehicles">Vehicles</option>
+              <option value="Others">Others</option>
+            </select>
+            <select
+              name="sort"
+              id="mobile-sort"
+              onChange={(e) => sortItems(e.target.value)}
+            >
+              <option value="*">Sort</option>
+              <option value="asc">Ascending</option>
+              <option value="desc">Descending</option>
+            </select>
+            <Button
+              className="mukta-semibold menu-shuffle"
+              onClick={shuffleItems}
+            >
+              Shuffle Items
             </Button>
           </div>
-        </div>
+        )}
         <div className="menu-column">
           {filteredItems?.length > 0 ? (
             filteredItems?.map((item) => (

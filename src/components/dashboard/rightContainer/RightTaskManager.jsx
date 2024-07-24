@@ -15,6 +15,8 @@ function RightTaskManager() {
     triggerPoint,
     setTriggerPoint,
   } = useContext(MyContext);
+
+  
   const [filteredTaskManager, setFilteredTaskManager] = useState([]);
   useEffect(() => {
     setFilteredTaskManager(TaskManager.filter((item) => item?.status === "1"));

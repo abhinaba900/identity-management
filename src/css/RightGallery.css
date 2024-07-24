@@ -138,3 +138,15 @@
   font-size: 16px;
   margin-right: 10px;
 }
+
+#mobile-sort,
+#mobile-filter {
+  padding: 1rem;
+  border: none;
+  background: transparent;
+  font-size: 16px;
+  font-family: "Montserrat", sans-serif;
+  cursor: pointer;
+}
+
+

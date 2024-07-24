@@ -1,10 +1,11 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import DataTableofArchived from "./DataTableofArchived";
 import { MyContext } from "../../../AuthProvider/AuthProvider";
 import { FaArchive } from "react-icons/fa";
 import { IoMdArrowRoundBack } from "react-icons/io";
 import { Button } from "react-bootstrap";
 import HamburgerMenu from "../../mobileResponcive/HamburgerMenu";
+import axios from "axios";
 
 function RightArchived() {
   const {
@@ -13,7 +14,26 @@ function RightArchived() {
     ArchivedTasks,
     navigateBack,
     navigationStack,
+    user,
+    setArchivedTasks,
   } = useContext(MyContext);
+
+  async function fetchArchive() {
+    try {
+      const response = await axios.get(
+        `https://bitpastel.io/mi/adil/identity_mgmt/api/get-archive-tasks?user_id=${user?.id}`
+      );
+      setArchivedTasks(response?.data?.data?.archive_tasks);
+      console.log(response, "archive");
+    } catch (error) {
+      console.log("Failed to fetch user details", error);
+    }
+  }
+
+  useEffect(() => {
+    fetchArchive();
+  }, []);
+
   return (
     <div>
       <div className="d-flex align-items-center gap-3 justify-content-between">
