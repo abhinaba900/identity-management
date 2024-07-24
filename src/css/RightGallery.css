@@ -1,0 +1,140 @@
+.menu-container {
+  max-width: 1200px;
+  margin: 50px auto;
+  padding: 20px;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  overflow-y: scroll;
+  scrollbar-width: none;
+}
+
+.menu-filter-container {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin-bottom: 20px;
+  margin-top: 10px;
+}
+.menu-column {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  max-height: 459px;
+  grid-gap: 20px;
+  overflow: hidden;
+  overflow-y: scroll;
+  scrollbar-width: none;
+}
+
+@media (max-width: 980px) {
+  .menu-column {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}
+
+.menu-shuffle,
+.menu-sort {
+  background-color: #1171ba;
+}
+
+.menu-sort {
+  margin-right: 10px;
+}
+.menu-item {
+  flex: 1 0 calc(25% - 20px);
+  max-width: calc(100% - 20px);
+  transition: transform 0.3s ease-in-out;
+  margin: 0 10px 20px 0;
+}
+
+.menu-item .card {
+  height: 200px;
+  width: 1fr;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+}
+
+.menu-item .card:hover {
+  cursor: pointer;
+  transform: scale(1.1);
+  transition: transform 0.3s ease-in-out;
+  color: red;
+}
+
+.menu-item .card:hover::before {
+  content: "";
+  position: absolute;
+  width: 17px;
+  height: 3px;
+  background-color: #000;
+  background-color: currentColor;
+  -webkit-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+.menu-item .card:hover::after {
+  content: "";
+  position: absolute;
+  width: 17px;
+  height: 3px;
+  background-color: #000;
+  background-color: currentColor;
+  -webkit-transform: rotate(-45deg);
+  transform: rotate(-45deg);
+}
+
+.menu-item .card img {
+  height: 100%;
+  width: auto;
+  object-fit: cover;
+  object-position: center;
+}
+
+.menu-item-content {
+  padding: 20px;
+}
+
+.menu-filter {
+  text-align: center;
+}
+
+.menu-filter button {
+  margin: 5px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+  background-color: #007bff;
+  color: #fff;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.menu-filter button:hover {
+  background-color: #0056b3;
+}
+
+/* upload image section */
+
+.input-container-file {
+  height: 100px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+#category {
+  width: 100%;
+  height: 40px;
+  border-radius: 5px;
+  border: none;
+  padding: 5px;
+  font-size: 16px;
+  margin-right: 10px;
+}
