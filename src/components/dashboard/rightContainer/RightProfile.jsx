@@ -17,6 +17,7 @@ function RightProfile() {
     triggerPoint,
     setTriggerPoint,
     userDetails,
+    setUserDetails,
   } = useContext(MyContext);
 
   const [editMode, setEditMode] = useState(false);
@@ -56,6 +57,10 @@ function RightProfile() {
         { headers: { "Content-Type": "multipart/form-data" } }
       );
       setTriggerPoint({ ...triggerPoint, getUser: triggerPoint.getUser + 1 });
+      setUserDetails({
+        ...userDetails,
+        user: { ...userDetails.user, p_image: response.data.data },
+      });
       toast.success("Profile image updated successfully");
     } catch (error) {
       console.error(error);
@@ -109,8 +114,8 @@ function RightProfile() {
       <Button
         variant="outline-dark"
         className="mukta-bold d-flex align-items-center gap-2 back-button"
-        onClick={navigateBack}
-        disabled={navigationStack.length === 0}
+        onClick={() => editMode && setEditMode(false)}
+        disabled={!editMode}
       >
         <IoMdArrowRoundBack /> Back
       </Button>
@@ -149,7 +154,7 @@ function RightProfile() {
               )}
               <div className="input-container-2">
                 <label className="mukta-semibold password-label">
-                  Name :-{" "}
+                  Name {editMode && <span style={{ color: "red" }}>*</span>}{" "}
                 </label>
                 <input
                   type="text"
@@ -163,7 +168,7 @@ function RightProfile() {
               </div>
               <div className="input-container-2">
                 <label className="mukta-semibold password-label">
-                  Email :-{" "}
+                  Email {editMode && <span style={{ color: "red" }}>*</span>}{" "}
                 </label>
                 <input
                   type="email"
@@ -177,7 +182,7 @@ function RightProfile() {
               </div>
               <div className="input-container-2">
                 <label className="mukta-semibold password-label">
-                  Phone :-{" "}
+                  Phone {editMode && <span style={{ color: "red" }}>*</span>}{" "}
                 </label>
                 <input
                   type="text"
@@ -190,7 +195,9 @@ function RightProfile() {
                 />
               </div>
               <div className="input-container-2">
-                <label className="mukta-semibold password-label">DOB :- </label>
+                <label className="mukta-semibold password-label">
+                  DOB {editMode && <span style={{ color: "red" }}>*</span>}{" "}
+                </label>
                 <input
                   type="date"
                   className="password-input mukta-semibold"
@@ -203,7 +210,7 @@ function RightProfile() {
               </div>
               <div className="input-container-2">
                 <label className="mukta-semibold password-label">
-                  Address :-{" "}
+                  Address {editMode && <span style={{ color: "red" }}>*</span>}{" "}
                 </label>
                 <input
                   type="text"

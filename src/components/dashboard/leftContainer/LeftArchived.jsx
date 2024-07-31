@@ -6,7 +6,10 @@ const LeftArchived = React.memo(() => {
   const { selectedSection, navigateToSection } = React.useContext(MyContext);
 
   // Function to handle click, making it testable and reusable
-  const handleNavigate = () => navigateToSection("archived");
+  const handleNavigate = () => {
+    navigateToSection("archived");
+    sessionStorage.setItem("selectedSection", "archived");
+  };
 
   // Determine CSS classes based on the current section for better readability
   const isActive = selectedSection === "archived";

@@ -48,8 +48,10 @@ function ForgetPassword() {
           <div className="containers">
             <div className="col-left">
               <div className="login-text">
-                <h2>Forget Password</h2>
-                <p>You will receive a new password in your email.</p>
+                <h2 className="mukta-semibold" style={{marginLeft: "-10px"}}>Forget Password</h2>
+                <p className="mukta-semibold" style={{marginLeft: "-10px"}}>
+                  You will receive a new password <br /> in your email.
+                </p>
               </div>
             </div>
             <div className="col-right">

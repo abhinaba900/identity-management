@@ -8,7 +8,9 @@ function AuthProvider({ children }) {
     () => JSON.parse(localStorage.getItem("user")) || {}
   );
   const [userDetails, setUserDetails] = useState({});
-  const [selectedSection, setSelectedSection] = useState("dashboard");
+  const [selectedSection, setSelectedSection] = useState(
+    sessionStorage.getItem("selectedSection") || "dashboard"
+  );
   const [openModal, setOpenModal] = useState(false);
   const [navigationStack, setNavigationStack] = useState([]);
   const [triggerPoint, setTriggerPoint] = useState({
@@ -26,7 +28,6 @@ function AuthProvider({ children }) {
 
   useEffect(() => {
     const getuserInfo = JSON.parse(localStorage.getItem("user"));
-    console.log("getuserInfo", getuserInfo);
     setUser(getuserInfo);
   }, [user?.id, triggerPoint]);
 
@@ -42,10 +43,8 @@ function AuthProvider({ children }) {
       }
     };
 
-    if (user.id) {
-      fetchUser();
-    }
-  }, [user?.id, triggerPoint?.getUser, triggerPoint]);
+    fetchUser();
+  }, [user?.id, triggerPoint]);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -85,7 +84,6 @@ function AuthProvider({ children }) {
           `https://bitpastel.io/mi/adil/identity_mgmt/api/get-archive-tasks?user_id=${user?.id}`
         );
         setArchivedTasks(response?.data?.data?.archive_tasks);
-        console.log(response, "archive");
       } catch (error) {
         console.log("Failed to fetch user details", error);
       }
@@ -96,21 +94,12 @@ function AuthProvider({ children }) {
 
   const navigateToSection = useCallback(
     (section) => {
-      setNavigationStack((prev) => [...prev, selectedSection]);
       setSelectedSection(section);
     },
     [selectedSection]
   );
 
-  const navigateBack = useCallback(() => {
-    setNavigationStack((prev) => {
-      const newStack = [...prev];
-      if (newStack.length > 0) {
-        setSelectedSection(newStack.pop());
-      }
-      return newStack;
-    });
-  }, []);
+  
 
   const contextValue = useMemo(
     () => ({
@@ -123,7 +112,6 @@ function AuthProvider({ children }) {
       openModal,
       setOpenModal,
       navigateToSection,
-      navigateBack,
       navigationStack,
       triggerPoint,
       setTriggerPoint,

@@ -18,7 +18,7 @@
 .menu-column {
   width: 100%;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   max-height: 459px;
   grid-gap: 20px;
   overflow: hidden;
@@ -45,16 +45,44 @@
   max-width: calc(100% - 20px);
   transition: transform 0.3s ease-in-out;
   margin: 0 10px 20px 0;
+  background-color: transparent;
+  margin: auto;
+  border: 1px solid #ccc;
 }
 
 .menu-item .card {
-  height: 200px;
   width: 1fr;
   display: flex;
+  height: 200px;
+  width: 300px;
   align-items: center;
   justify-content: center;
   overflow: hidden;
   position: relative;
+  background-color: transparent;
+  border: none;
+}
+
+.menu-item .card .card-img-top {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: center;
+  background-color: white;
+}
+
+.menu-item .card h3 {
+  position: absolute;
+  background-color: white;
+  padding: 0.5rem;
+  bottom: 0;
+  font-size: 20px;
+  font-weight: 700;
+  text-align: center;
+  width: 100%;
+  text-transform: uppercase;
+  color: #282222;
 }
 
 .menu-item .card:hover {
@@ -62,28 +90,6 @@
   transform: scale(1.1);
   transition: transform 0.3s ease-in-out;
   color: red;
-}
-
-.menu-item .card:hover::before {
-  content: "";
-  position: absolute;
-  width: 17px;
-  height: 3px;
-  background-color: #000;
-  background-color: currentColor;
-  -webkit-transform: rotate(45deg);
-  transform: rotate(45deg);
-}
-
-.menu-item .card:hover::after {
-  content: "";
-  position: absolute;
-  width: 17px;
-  height: 3px;
-  background-color: #000;
-  background-color: currentColor;
-  -webkit-transform: rotate(-45deg);
-  transform: rotate(-45deg);
 }
 
 .menu-item .card img {
@@ -101,7 +107,7 @@
   text-align: center;
 }
 
-.menu-filter button {
+.menu-filter .buttons {
   margin: 5px;
   padding: 10px 20px;
   font-size: 16px;
@@ -113,8 +119,9 @@
   transition: background-color 0.3s ease-in-out;
 }
 
-.menu-filter button:hover {
+.menu-filter .buttons:hover {
   background-color: #0056b3;
+  color: #fff;
 }
 
 /* upload image section */
@@ -140,13 +147,34 @@
 }
 
 #mobile-sort,
-#mobile-filter {
-  padding: 1rem;
-  border: none;
+#mobile-filter,
+#mobile-sort-2 {
+  padding: 0.5rem;
   background: transparent;
   font-size: 16px;
   font-family: "Montserrat", sans-serif;
   cursor: pointer;
 }
 
+.menu-filter .active-2 {
+  background-color: white;
+  color: black;
+  border: 1px solid #007bff;
+}
 
+#mobile-sort-2 {
+  width: 200px;
+  border-radius: 5px;
+}
+
+#mobile-sort-2 > option {
+  background-color: transparent;
+}
+
+#images {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 5px;
+}

@@ -8,6 +8,7 @@ const LeftProfile = React.memo(() => {
   // Function to handle navigation, enhances testability and maintainability
   const handleNavigate = () => {
     navigateToSection("profile");
+    sessionStorage.setItem("selectedSection", "profile");
   };
 
   // Conditional class application for better readability

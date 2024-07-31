@@ -23,6 +23,7 @@ const App = ({ data, userId, setTriggerPoint, triggerPoint }) => {
   const [show, setShow] = useState(false);
   const [editShow, setEditShow] = useState(false);
   const [addShow, setAddShow] = useState(false);
+  const [archiveShow, setArchiveShow] = useState(false);
 
   const handleClose = useCallback(() => setShow(false), []);
   const handleShow = useCallback((userId, taskId) => {
@@ -39,6 +40,12 @@ const App = ({ data, userId, setTriggerPoint, triggerPoint }) => {
   const handleAddClose = useCallback(() => setAddShow(false), []);
   const handleAddShow = useCallback(() => {
     setAddShow(true);
+  }, []);
+
+  const handleArchiveClose = useCallback(() => setArchiveShow(false), []);
+  const handleArchiveShow = useCallback((userId, taskId) => {
+    setModalData({ userId, taskId });
+    setArchiveShow(true);
   }, []);
 
   useEffect(() => {
@@ -69,7 +76,7 @@ const App = ({ data, userId, setTriggerPoint, triggerPoint }) => {
           </Button>
           <Button
             className="p-button-rounded p-button-help"
-            onClick={() => archiveTask(rowData.id)}
+            onClick={() => handleArchiveShow(userId, rowData.id)}
           >
             <IoArchive size={16} />
           </Button>
@@ -84,28 +91,6 @@ const App = ({ data, userId, setTriggerPoint, triggerPoint }) => {
 
   const deleteTask = (id) => {
     handleShow(userId, id);
-  };
-
-  const archiveTask = async (id) => {
-    try {
-      const response = await axios.put(
-        `https://bitpastel.io/mi/adil/identity_mgmt/api/archive-task?user_id=${userId}&&task_id=${id}`,
-        null,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      toast.success("Task archived successfully");
-
-      setTriggerPoint({
-        ...triggerPoint,
-        getTasks: Math.random() + Math.random(),
-      });
-    } catch (error) {
-      toast.error("Failed to archive Task");
-    }
   };
 
   const headerGroup = (
@@ -201,6 +186,15 @@ const App = ({ data, userId, setTriggerPoint, triggerPoint }) => {
         triggerPoint={triggerPoint}
         userId={userId}
       />
+
+      <ArchiveModal
+        show={archiveShow}
+        handleClose={handleArchiveClose}
+        userId={modalData?.userId}
+        taskId={modalData?.taskId}
+        setTriggerPoint={setTriggerPoint}
+        triggerPoint={triggerPoint}
+      />
     </div>
   );
 };
@@ -241,6 +235,7 @@ function OpenDeleteModal({
           <Button
             variant="secondary"
             className="btn btn-secondary"
+            type="button"
             onClick={handleClose}
           >
             Close
@@ -300,8 +295,8 @@ function EditFunctionHandaling({
           <Modal.Title>Edit Task</Modal.Title>
         </Modal.Header>
         <Modal.Body>
+          <label className="mukta-semibold password-label">Task Name</label>
           <div className="input-container">
-            <label className="mukta-semibold password-label">Task Name</label>
             <input
               type="text"
               className="password-input mukta-semibold"
@@ -314,8 +309,8 @@ function EditFunctionHandaling({
               }
             />
           </div>
+          <label className="mukta-semibold password-label">Description</label>
           <div className="input-container">
-            <label className="mukta-semibold password-label">Description</label>
             <input
               type="text"
               className="password-input mukta-semibold"
@@ -333,6 +328,7 @@ function EditFunctionHandaling({
           <Button
             variant="secondary"
             className="btn btn-secondary"
+            type="button"
             onClick={handleClose}
           >
             Close
@@ -395,8 +391,10 @@ function AddTaskModal({
           <Modal.Title>Add Task</Modal.Title>
         </Modal.Header>
         <Modal.Body>
+          <label className="mukta-semibold password-label mr-2">
+            Task Name{" "}
+          </label>
           <div className="input-container">
-            <label className="mukta-semibold password-label">Task Name</label>
             <input
               type="text"
               className="password-input mukta-semibold"
@@ -409,8 +407,10 @@ function AddTaskModal({
               }
             />
           </div>
+          <label className="mukta-semibold password-label mr-2">
+            Description{" "}
+          </label>
           <div className="input-container">
-            <label className="mukta-semibold password-label">Description</label>
             <input
               type="text"
               className="password-input mukta-semibold"
@@ -428,7 +428,8 @@ function AddTaskModal({
           <Button
             variant="secondary"
             className="btn btn-secondary"
-            onClick={handleClose}
+            type="button"
+            onClick={() => handleClose()}
           >
             Close
           </Button>
@@ -439,6 +440,62 @@ function AddTaskModal({
             disabled={!newTaskData.task_name || !newTaskData.description}
           >
             Add
+          </Button>
+        </Modal.Footer>
+      </form>
+    </Modal>
+  );
+}
+
+function ArchiveModal({
+  show,
+  handleClose,
+  userId,
+  taskId,
+  setTriggerPoint,
+  triggerPoint,
+}) {
+  const handleArchive = async (e) => {
+    e.preventDefault();
+    try {
+      await axios.put(
+        `https://bitpastel.io/mi/adil/identity_mgmt/api/archive-task?user_id=${userId}&task_id=${taskId}`,
+        null,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      toast.success("Task archived successfully");
+
+      setTriggerPoint({
+        ...triggerPoint,
+        getTasks: Math.random() + Math.random(),
+      });
+      handleClose();
+    } catch (error) {
+      toast.error("Failed to archive Task");
+    }
+  };
+
+  return (
+    <Modal show={show} onHide={handleClose}>
+      <form onSubmit={handleArchive}>
+        <Modal.Header closeButton>
+          <Modal.Title>Archive Task</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Are you sure you want to archive this Task?</Modal.Body>
+        <Modal.Footer>
+          <Button
+            variant="secondary"
+            className="btn btn-secondary"
+            onClick={() => handleClose()}
+          >
+            Close
+          </Button>
+          <Button variant="warning" className="btn btn-warning" type="submit">
+            Archive
           </Button>
         </Modal.Footer>
       </form>

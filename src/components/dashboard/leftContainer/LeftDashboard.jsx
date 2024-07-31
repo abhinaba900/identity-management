@@ -8,6 +8,7 @@ const LeftDashboard = React.memo(() => {
   // Function to handle click event
   const handleClick = () => {
     navigateToSection("dashboard");
+    sessionStorage.setItem("selectedSection", "dashboard");
   };
 
   // Dynamic class assignment for better readability

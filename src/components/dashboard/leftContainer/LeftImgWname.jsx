@@ -6,11 +6,13 @@ import { toast } from "react-toastify";
 import { Button } from "react-bootstrap";
 
 function LeftImgWname() {
-  const { userDetails } = React.useContext(MyContext);
+  const { userDetails, setSelectedSection } = React.useContext(MyContext);
   const navigate = useNavigate();
 
   function handleLogout() {
     localStorage.clear();
+    sessionStorage.clear();
+    setSelectedSection("dashboard");
     toast.success("Logged Out Successfully");
     navigate("/"); // Navigate to the login or desired page after logout
   }

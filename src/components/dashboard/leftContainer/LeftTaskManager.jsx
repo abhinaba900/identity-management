@@ -8,6 +8,7 @@ const LeftTaskManager = React.memo(() => {
   // Function to handle the navigation, encapsulating logic for clarity
   const handleNavigate = () => {
     navigateToSection("taskManager");
+    sessionStorage.setItem("selectedSection", "taskManager");
   };
 
   // Determine CSS class based on the current section for better readability

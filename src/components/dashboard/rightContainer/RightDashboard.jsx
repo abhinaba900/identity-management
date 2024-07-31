@@ -1,14 +1,12 @@
 import React, { useContext } from "react";
 import { AiOutlineDashboard } from "react-icons/ai";
 import { FaRegImage, FaTasks, FaArchive } from "react-icons/fa"; // Correct icon import
-import { IoMdArrowRoundBack } from "react-icons/io";
-import { Button } from "react-bootstrap";
+
 import { MyContext } from "../../../AuthProvider/AuthProvider"; // Correct the path as needed
 import HamburgerMenu from "../../mobileResponcive/HamburgerMenu";
 
 function RightDashboard() {
-  const { navigateToSection, navigateBack, navigationStack, userDetails } =
-    useContext(MyContext);
+  const { navigateToSection, userDetails } = useContext(MyContext);
 
   return (
     <div>
@@ -19,14 +17,7 @@ function RightDashboard() {
         <HamburgerMenu />
       </div>
       <hr />
-      <Button
-        variant="outline-dark"
-        className="mukta-bold d-flex align-items-center gap-2 back-button"
-        onClick={navigateBack}
-        disabled={navigationStack.length === 0}
-      >
-        <IoMdArrowRoundBack /> Back
-      </Button>
+
       <div className="dashboard-card-parent-container">
         <div
           className="d-flex align-items-center gap-3 justify-content-between dashboard-card-child"

@@ -2,9 +2,9 @@ import axios from "axios";
 import { useContext, useState, useCallback } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-import { BsFileEarmarkArrowUp } from "react-icons/bs";
 import { MyContext } from "../../../AuthProvider/AuthProvider";
 import { toast } from "react-toastify";
+import { FaUpload } from "react-icons/fa";
 
 function useFormData(initialState) {
   const [formData, setFormData] = useState(initialState);
@@ -56,16 +56,22 @@ function RightUploadImage() {
     uploadFormData.append("user_id", user?.id);
     uploadFormData.append("title", title);
     uploadFormData.append("category", category);
-    images.forEach((image) => uploadFormData.append("file", image));
+    console.log(images, "images");
 
     try {
-      const response = await axios.post(
-        "https://bitpastel.io/mi/adil/identity_mgmt/api/add-image",
-        uploadFormData,
-        { headers: { "Content-Type": "multipart/form-data" } }
-      );
+      images.forEach(async (image) => {
+        uploadFormData.append(`file`, image);
+        const response = await axios.post(
+          "https://bitpastel.io/mi/adil/identity_mgmt/api/add-image",
+          uploadFormData,
+          { headers: { "Content-Type": "multipart/form-data" } }
+        );
+      });
 
       setTriggerPoint({ ...triggerPoint, getUser: Math.random() });
+
+      setFormData({ title: "", category: "", images: [], error: "" });
+
       toast.success("Image uploaded successfully");
       const Imageresponse = await axios.get(
         `https://bitpastel.io/mi/adil/identity_mgmt/api/get-all-images?user_id=${user?.id}`
@@ -87,7 +93,7 @@ function RightUploadImage() {
         onClick={handleShow}
         className="mukta-bold d-flex align-items-center gap-2 back-button"
       >
-        Upload Image
+        Upload Image <FaUpload />
       </Button>
 
       <Modal show={show} onHide={handleClose} centered>
@@ -104,8 +110,8 @@ function RightUploadImage() {
               <input
                 type="text"
                 className="password-input mukta-semibold"
-                placeholder="Please Enter Image Title"
                 name="title"
+                placeholder="----"
                 value={formData.title}
                 onChange={handleInputChange}
               />
@@ -127,12 +133,10 @@ function RightUploadImage() {
             </div>
             <div className="input-container-file">
               <h2 className="heading">
-                <label htmlFor="file" className="file-label">
-                  <BsFileEarmarkArrowUp /> Choose File
-                </label>
                 <input
                   type="file"
-                  id="file"
+                  name="images"
+                  id="images"
                   multiple
                   accept="image/*"
                   onChange={handleFileUpload}

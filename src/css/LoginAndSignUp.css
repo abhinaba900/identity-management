@@ -216,7 +216,6 @@ body {
 
 .input-and-logo-container {
   position: relative;
-
 }
 
 .input-logo {
@@ -224,6 +223,9 @@ body {
   top: 10px;
   right: 10px;
   color: #44c7f5;
+  background-color: white;
+  width: 20px;
+  padding-right: -10px;
 }
 
 .error {

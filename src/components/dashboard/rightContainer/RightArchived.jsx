@@ -2,8 +2,6 @@ import React, { useContext, useEffect } from "react";
 import DataTableofArchived from "./DataTableofArchived";
 import { MyContext } from "../../../AuthProvider/AuthProvider";
 import { FaArchive } from "react-icons/fa";
-import { IoMdArrowRoundBack } from "react-icons/io";
-import { Button } from "react-bootstrap";
 import HamburgerMenu from "../../mobileResponcive/HamburgerMenu";
 import axios from "axios";
 
@@ -12,8 +10,6 @@ function RightArchived() {
     triggerPoint,
     setTriggerPoint,
     ArchivedTasks,
-    navigateBack,
-    navigationStack,
     user,
     setArchivedTasks,
   } = useContext(MyContext);
@@ -44,16 +40,6 @@ function RightArchived() {
       </div>
       <hr />
 
-      <div className="d-flex align-items-center gap-3 justify-content-between">
-        <Button
-          variant="outline-dark"
-          className="mukta-bold d-flex align-items-center gap-2 back-button"
-          onClick={navigateBack}
-          disabled={navigationStack.length === 0}
-        >
-          <IoMdArrowRoundBack /> Back
-        </Button>
-      </div>
       <DataTableofArchived
         data={ArchivedTasks}
         triggerPoint={triggerPoint}

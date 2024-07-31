@@ -8,6 +8,7 @@ const LeftGallery = React.memo(() => {
   // Function to handle the click event
   const handleClick = () => {
     navigateToSection("gallery");
+    sessionStorage.setItem("selectedSection", "gallery");
   };
 
   // Calculate class names for better readability

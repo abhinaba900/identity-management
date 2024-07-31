@@ -5,21 +5,22 @@ import React, {
   useEffect,
   useCallback,
 } from "react";
-import { IoMdArrowRoundBack } from "react-icons/io";
+import { FaShuffle } from "react-icons/fa6";
 import { Button } from "react-bootstrap";
 import { MyContext } from "../../../AuthProvider/AuthProvider";
-import { FaImages } from "react-icons/fa";
+import { FaImages, FaDog, FaCar } from "react-icons/fa";
 import "../../../css/RightGallery.css";
 import RightUploadImage from "./RightUploadImage";
 import Modal from "react-bootstrap/Modal";
 import axios from "axios";
 import { toast } from "react-toastify";
 import HamburgerMenu from "../../mobileResponcive/HamburgerMenu";
+import { HiSortAscending, HiSortDescending } from "react-icons/hi";
+import { MdOutlineImageSearch, MdOutlineCallToAction } from "react-icons/md";
+import { GiHouse } from "react-icons/gi";
 
 function RightGallery() {
   const {
-    navigateBack,
-    navigationStack,
     GalleryImages,
     triggerPoint,
     user,
@@ -30,7 +31,6 @@ function RightGallery() {
   const [items, setItems] = useState([]);
   const [show, setShow] = useState(false);
   const [modalData, setModalData] = useState({ userId: null, imageId: null });
-  const [mobile, setMobile] = useState(false);
 
   const [isMobile, setIsMobile] = useState(window.innerWidth < 1200);
 
@@ -41,7 +41,7 @@ function RightGallery() {
 
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
-  }, [window.innerWidth]);
+  }, []);
 
   const handleClose = useCallback(() => setShow(false), []);
   const handleShow = useCallback((userId, imageId) => {
@@ -51,12 +51,24 @@ function RightGallery() {
 
   useEffect(() => {
     setItems([
-      ...GalleryImages.Animals.map((item) => ({ ...item, type: "Animals" })),
-      ...GalleryImages.House.map((item) => ({ ...item, type: "House" })),
-      ...GalleryImages.Vehicles.map((item) => ({ ...item, type: "Vehicles" })),
-      ...GalleryImages.Others.map((item) => ({ ...item, type: "Others" })),
+      ...(GalleryImages?.Animals || []).map((item) => ({
+        ...item,
+        type: "Animals",
+      })),
+      ...(GalleryImages?.House || []).map((item) => ({
+        ...item,
+        type: "House",
+      })),
+      ...(GalleryImages?.Vehicles || []).map((item) => ({
+        ...item,
+        type: "Vehicles",
+      })),
+      ...(GalleryImages?.Others || []).map((item) => ({
+        ...item,
+        type: "Others",
+      })),
     ]);
-  }, [GalleryImages, triggerPoint.getPhotos]);
+  }, [GalleryImages, triggerPoint]);
 
   const filteredItems = useMemo(
     () => items.filter((item) => filter === "*" || item.type === filter),
@@ -77,7 +89,9 @@ function RightGallery() {
   const sortItems = useCallback((order) => {
     setItems((prevItems) => {
       const sorted = [...prevItems].sort((a, b) =>
-        order === "asc" ? a.id.localeCompare(b.id) : b.id.localeCompare(a.id)
+        order === "asc"
+          ? a.title.localeCompare(b.title)
+          : b.title.localeCompare(a.title)
       );
       return sorted;
     });
@@ -85,7 +99,10 @@ function RightGallery() {
 
   return (
     <div>
-      <div className="d-flex align-items-center gap-3 justify-content-between">
+      <div
+        className="d-flex align-items-center gap-3 justify-content-between"
+        style={{ scrollbarWidth: "none", overflow: "hidden" }}
+      >
         <h3 className="mukta-bold fs-1 d-flex align-items-center gap-2">
           <FaImages /> Gallery
         </h3>
@@ -94,46 +111,64 @@ function RightGallery() {
       </div>
       <hr />
       <div className="d-flex align-items-center gap-3 justify-content-between">
-        <Button
-          variant="outline-dark"
-          className="mukta-bold d-flex align-items-center gap-2 back-button"
-          onClick={navigateBack}
-          disabled={navigationStack.length === 0}
-        >
-          <IoMdArrowRoundBack /> Back
-        </Button>
+        <div className="d-flex align-items-center gap-3">
+          <Button
+            variant="outline-dark"
+            className="mukta-bold d-flex align-items-center gap-2 back-button"
+            onClick={shuffleItems}
+          >
+            Shuffle Items <FaShuffle />
+          </Button>
+          <select
+            name="sort"
+            id="mobile-sort-2"
+            onChange={(e) => sortItems(e.target.value)}
+          >
+            <option value="desc">
+              Descending <HiSortDescending />
+            </option>
+            <option value="asc">
+              Ascending <HiSortAscending />
+            </option>
+          </select>
+        </div>
         <RightUploadImage />
       </div>
 
       <div className="gallery-parent-container">
         {!isMobile ? (
           <div className="menu-filter-container">
-            <Button
-              className="mukta-semibold menu-shuffle"
-              onClick={shuffleItems}
-            >
-              Shuffle Items
-            </Button>
             <div className="menu-filter">
-              <button onClick={() => setFilter("*")}>All Items</button>
-              <button onClick={() => setFilter("House")}>House</button>
-              <button onClick={() => setFilter("Animals")}>Animals</button>
-              <button onClick={() => setFilter("Vehicles")}>Vehicles</button>
-              <button onClick={() => setFilter("Others")}>Others</button>
-            </div>
-            <div>
-              <Button
-                className="mukta-semibold menu-sort"
-                onClick={() => sortItems("asc")}
+              <button
+                onClick={() => setFilter("*")}
+                className={`buttons ${filter === "*" && "active-2"}`}
               >
-                Ascending
-              </Button>
-              <Button
-                className="mukta-semibold menu-sort"
-                onClick={() => sortItems("desc")}
+                All Items <MdOutlineCallToAction />
+              </button>
+              <button
+                onClick={() => setFilter("House")}
+                className={`buttons ${filter === "House" && "active-2"}`}
               >
-                Descending
-              </Button>
+                House <GiHouse />
+              </button>
+              <button
+                onClick={() => setFilter("Animals")}
+                className={`buttons ${filter === "Animals" && "active-2"} `}
+              >
+                Animals <FaDog />
+              </button>
+              <button
+                onClick={() => setFilter("Vehicles")}
+                className={`buttons ${filter === "Vehicles" && "active-2"}`}
+              >
+                Vehicles <FaCar />
+              </button>
+              <button
+                onClick={() => setFilter("Others")}
+                className={`buttons ${filter === "Others" && "active-2"}`}
+              >
+                Others <MdOutlineImageSearch />
+              </button>
             </div>
           </div>
         ) : (
@@ -162,14 +197,14 @@ function RightGallery() {
               className="mukta-semibold menu-shuffle"
               onClick={shuffleItems}
             >
-              Shuffle Items
+              Shuffle Items <FaShuffle />
             </Button>
           </div>
         )}
         <div className="menu-column">
           {filteredItems?.length > 0 ? (
             filteredItems?.map((item) => (
-              <div key={item.title} className="menu-item">
+              <div key={item.id} className="menu-item">
                 <div className="card">
                   <img
                     src={`https://bitpastel.io/mi/adil/identity_mgmt/uploads/${item.file_name}`}
@@ -177,6 +212,7 @@ function RightGallery() {
                     onClick={() => handleShow(user.id, item.id)}
                     className="card-img-top"
                   />
+                  <h3>{item.title}</h3>
                 </div>
               </div>
             ))
